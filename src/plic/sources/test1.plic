@@ -1,0 +1,10 @@
+programme year {
+//mdr
+entier annee ;
+entier mois ;
+annee := 2023 ;
+mois := 200 ;
+mois := 2 ;
+ecrire mois ;
+ecrire annee ; //petit commentaire
+}

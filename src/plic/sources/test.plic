@@ -1,0 +1,8 @@
+// un exemple
+programme test {
+    entier a ;
+    tableau [ 2 ] b ;
+    entier c ;
+    tableau [ 1 ] d ;
+    b [0] := 7 ;
+}

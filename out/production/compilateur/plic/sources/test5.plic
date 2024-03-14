@@ -1,0 +1,5 @@
+programme nombre {
+//petit prog erreur declarer 2 fois meme entier
+entier k ;
+entier k ;
+}

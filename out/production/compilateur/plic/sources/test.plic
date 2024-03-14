@@ -1,0 +1,15 @@
+// un exemple
+programme test {
+    entier a ;
+    tableau [ 2 ] b ;
+    entier c ;
+    tableau [ 1 ] d ;
+
+
+    //tableau [ 6 ]  ;
+    //entier p ;
+    //entier k ;
+    //tableau [ 7 ] tabb ;
+    //entier a ;
+
+}

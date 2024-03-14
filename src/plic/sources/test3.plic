@@ -1,0 +1,6 @@
+programme nombre {
+//petit prog qui print juste des nombre
+ecrire 15 ;
+ecrire 39 ;
+ecrire 57 ;
+}

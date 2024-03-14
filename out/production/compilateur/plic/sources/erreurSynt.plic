@@ -1,0 +1,6 @@
+programme year {
+//mdr
+entier momo ;
+annee := 2023 ;
+ecrire annee ; //petit commentaire
+}

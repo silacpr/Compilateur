@@ -1,0 +1,4 @@
+programme nombre {
+//petit prog erreur ecrire idf non defini
+ecrire test ;
+}

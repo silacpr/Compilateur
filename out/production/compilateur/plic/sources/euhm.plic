@@ -1,0 +1,10 @@
+// un exemple
+programme test {
+//    tableau [ 2 ] tab ;
+    entier k ;
+    entier a ;
+    k := 2 ;
+    k := 2 ;
+    ecrire 4546 ;
+    ecrire k ;
+}
