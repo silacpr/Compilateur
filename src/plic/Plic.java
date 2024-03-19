@@ -49,11 +49,11 @@ public class Plic {
         AnalyseurSyntaxique as = new AnalyseurSyntaxique(file);
         Bloc bloc = as.analyse();
 
-        TDS.getInstance().getTable().forEach(((entree, symbole) -> System.out.println(entree.getIdf() + " a pour emplacement " + symbole.getDeplacement())));
+        //TDS.getInstance().getTable().forEach(((entree, symbole) -> System.out.println(entree.getIdf() + " a pour emplacement " + symbole.getDeplacement())));
 
-        System.out.println(TDS.getInstance().getTable().size());
-        //String mdr = bloc.toMips();
-        //System.out.println("\n\n"+mdr);
+        //System.out.println(TDS.getInstance().getTable().size());
+        String mdr = bloc.toMips();
+        System.out.println("\n\n"+mdr);
 
 
     }

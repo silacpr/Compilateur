@@ -8,11 +8,8 @@ public class Idf extends Expression {
     @Override
     public String toString() {
         Symbole symbole = null;
-        try {
-            symbole = TDS.getInstance().identifier(new Entree(nom));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        symbole = TDS.getInstance().identifier(new Entree(nom));
         int depl = symbole.getDeplacement();
         return "lw $t0, " + depl + "($fp)\n";
     }
