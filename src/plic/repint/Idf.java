@@ -1,6 +1,6 @@
 package plic.repint;
 
-public class Idf extends Expression {
+public class Idf extends Acces {
     private String nom;
     public Idf(String nom) {
         this.nom = nom;
@@ -8,8 +8,11 @@ public class Idf extends Expression {
     @Override
     public String toString() {
         Symbole symbole = null;
-
-        symbole = TDS.getInstance().identifier(new Entree(nom));
+        try {
+            symbole = TDS.getInstance().identifier(new Entree(nom));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         int depl = symbole.getDeplacement();
         return "lw $t0, " + depl + "($fp)\n";
     }

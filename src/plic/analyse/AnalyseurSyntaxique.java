@@ -15,6 +15,7 @@ public class AnalyseurSyntaxique {
 
     public AnalyseurSyntaxique(File file) throws FileNotFoundException {
         this.analex = new AnalyseurLexical(file);
+
     }
 
     public Bloc analyse() throws ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration {
@@ -28,11 +29,13 @@ public class AnalyseurSyntaxique {
         if (!this.uniteCourante.equals("programme")) {
             throw new ErreurSyntaxique("programme attendu");
         }
+
         this.uniteCourante = this.analex.next();
 
         if(!this.estIdf()){
-            throw new ErreurSyntaxique("idf attendu");
+            throw new ErreurSyntaxique("idf attendu 1");
         }
+
         this.uniteCourante = this.analex.next();
 
         return this.analyseBloc();
@@ -67,12 +70,7 @@ public class AnalyseurSyntaxique {
         Bloc bloc = new Bloc();
 
         // Ajoutez une boucle pour gérer les déclarations initiales si elles existent.
-
-        //while (uniteCourante.equals("entier")) {
-
-        //je remplace parce que là il y a aussi le type tableau mtn
-
-        while (this.estType()){
+        while (uniteCourante.equals("entier")) {
             this.analyseDeclaration();
         }
 
@@ -89,75 +87,40 @@ public class AnalyseurSyntaxique {
             throw new ErreurSyntaxique(terminal + " attendu ");
         }
         this.uniteCourante = this.analex.next();
-
     }
+
+
 
     private void analyseDeclaration() throws ErreurSyntaxique, DoubleDeclaration {
         while (this.estType()) {
-            String type = this.analyseType();
-
-            if (type.equals("entier")){
-                if (!this.estIdf()) {
-                    throw new ErreurSyntaxique(" " + uniteCourante+"  Idf attendu");
-                }
-
-                Entree entree = new Entree(uniteCourante);
-
-                Symbole symbole = new Symbole("entier", 0);
-
-                TDS.getInstance().ajouter(entree, symbole);
-
-                this.uniteCourante = this.analex.next();
-                this.analyseTerminal(";");
+            this.analyseType();
+            if (!this.estIdf()) {
+                throw new ErreurSyntaxique(" " + uniteCourante+"  Idf attendu");
             }
-            else {
-                //au début je vérifie le []
-                this.analyseTerminal("[");
 
-                //ça c'est la taille de mon tableau
-                this.estCsteEntiere();
+            Entree entree = new Entree(uniteCourante);
 
-                int taille = Integer.parseInt(this.uniteCourante);
+            Symbole symbole = new SymboleEntier("entier", 0);
 
-                if (taille<=0) throw new ErreurSyntaxique("taille tableau inférieure à 1");
+            TDS.getInstance().ajouter(entree, symbole);
 
-                this.uniteCourante = this.analex.next();
-
-                this.analyseTerminal("]");
-
-                if (!this.estIdf()) {
-                    throw new ErreurSyntaxique(" " + uniteCourante+"  Idf attendu");
-                }
-                //Le blase de mon tableau
-                Entree entree = new Entree(uniteCourante);
-
-                //là je peux créer mon symbole.
-                Symbole symbole = new Symbole("tableau", 0, taille);
-
-                TDS.getInstance().ajouter(entree, symbole);
-
-                this.uniteCourante = this.analex.next();
-                this.analyseTerminal(";");
-            }
+            this.uniteCourante = this.analex.next();
+            this.analyseTerminal(";");
         }
     }
 
-    private String analyseType() throws ErreurSyntaxique {
-        if (this.uniteCourante.equals("entier")) {
-            this.uniteCourante = this.analex.next();
-            return "entier";
+    private void analyseType() throws ErreurSyntaxique {
+        if (!this.uniteCourante.equals("entier")) {
+            throw new ErreurSyntaxique("Type 'entier' attendu");
         }
-        else if (this.uniteCourante.equals("tableau")) {
-            this.uniteCourante = this.analex.next();
-            return "tableau";
-        }
-        else throw new ErreurSyntaxique("type inconnu : " + this.uniteCourante);
+        this.uniteCourante = this.analex.next();
     }
 
     private Instruction analyseInstruction() throws ErreurSyntaxique, AbsenceDeclaration {
         Instruction instruction;
+
         if (this.estIdf()) {
-            if(!TDS.getInstance().idfexiste(new Entree(this.uniteCourante))) throw new AbsenceDeclaration("Idf inconnu :"+this.uniteCourante);
+            if(TDS.getInstance().idfexiste(new Entree(this.uniteCourante))==false) throw new AbsenceDeclaration("Idf inconnu :"+this.uniteCourante);
             instruction = this.analyseAffectation();
         } else if (this.uniteCourante.equals("ecrire")) {
             instruction = this.analyseEcrire();
@@ -168,7 +131,6 @@ public class AnalyseurSyntaxique {
     }
 
     private Instruction analyseEcrire() throws ErreurSyntaxique, AbsenceDeclaration {
-
         this.uniteCourante = this.analex.next();
         if (this.estIdf()){
             if (!TDS.getInstance().idfexiste(new Entree(this.uniteCourante))) throw new AbsenceDeclaration("Idf inconnu : "+this.uniteCourante);
@@ -178,102 +140,57 @@ public class AnalyseurSyntaxique {
         return ecrire;
     }
 
-    private Instruction analyseAffectation() throws ErreurSyntaxique, AbsenceDeclaration {
-
-        //bah là je dois aussi verifier si c'est un entier ou un tableau qui existe.
-
-        Affectation affectation = null;
+    private Instruction analyseAffectation() throws ErreurSyntaxique {
 
         String idf = this.uniteCourante;
 
         analyseAcces();
 
-        String type = TDS.getInstance().identifier(new Entree(idf)).getType();
-
-        System.out.println("type = "+type);
-
-        if (type.equals("entier")){
-            this.analyseTerminal(":=");
-            affectation= new Affectation(idf,this.analyseExpression());
-        }
-        else {
-            this.analyseTerminal("[");
-            if (!this.estCsteEntiere()) throw new ErreurSyntaxique("index n'est pas une constante entière");
-            int index = Integer.parseInt(uniteCourante);
-            if (index<0 || index>=TDS.getInstance().identifier(new Entree(idf)).getTaille()) throw new ErreurSyntaxique("index out of bound");
-            System.out.println("index = " + index);
-            this.uniteCourante = this.analex.next();
-            this.analyseTerminal("]");
-            this.analyseTerminal(":=");
-            affectation= new Affectation(idf,this.analyseExpression(), index);
-
+        if (!this.uniteCourante.equals(":=")) {
+            throw new ErreurSyntaxique(":= attendu");
         }
 
+        this.uniteCourante = this.analex.next();
 
-
-
+        Affectation instruction = new Affectation(idf,this.analyseExpression());
         this.analyseTerminal(";");
-        return affectation;
+        return instruction;
     }
 
-    //ça c'est sensé avoir plus d'utilité , peut etre qu'il renvoie un idf maybbeee
     private void analyseAcces() throws ErreurSyntaxique {
         if (!this.estIdf()) {
             throw new ErreurSyntaxique("Idf attendu");
         }
-        else if (!TDS.getInstance().idfexiste(new Entree(uniteCourante))) throw new ErreurSyntaxique("idf inconu");
         this.uniteCourante = this.analex.next();
     }
 
 
-    private Expression analyseExpression() throws ErreurSyntaxique, AbsenceDeclaration {
+    private Expression analyseExpression() throws ErreurSyntaxique {
         if (this.estIdf()) {
-            String idfName = this.uniteCourante;
+            Idf idf = new Idf(this.uniteCourante);
             analyseAcces();
-
-            //bah enfaite là fait que je gère le tab dans un tab
-            // AHHHHH ça marche pas avec un index diff de 0 !!!
-
-            // Vérifier si c'est un accès tableau
-            if (this.uniteCourante.equals("[")) {
-                this.uniteCourante = this.analex.next(); // Avancer pour obtenir l'index
-
-                if (!this.estCsteEntiere()) throw new ErreurSyntaxique("Index entier attendu");
-                int index = Integer.parseInt(this.uniteCourante);
-                this.uniteCourante = this.analex.next(); // Avancer après l'index
-                this.analyseTerminal("]"); // S'attendre à fermer le crochet
-
-                System.out.println("AHHH");
-                return new AccesTableau(idfName, index);
-            } else {
-                // Si ce n'est pas un accès tableau, retourner simplement l'identifiant
-                return new Idf(idfName);
-            }
+            return  idf;
         } else if (this.estCsteEntiere()) {
-            int val = Integer.parseInt(this.uniteCourante);
-            this.uniteCourante = this.analex.next(); // Avancer après le nombre
-            return new Nombre(val);
+            Nombre nombre = new Nombre(Integer.parseInt(this.uniteCourante));
+            this.uniteCourante = this.analex.next();
+            return nombre;
         } else {
-            throw new ErreurSyntaxique(this.uniteCourante + " : Caractère inconnue");
+           throw new ErreurSyntaxique( this.uniteCourante + " : Caractère inconnue");
         }
     }
 
 
-    //ça enfaite c'est utile donc faut que je modifie pour pouvoir l'utilsier finalement.
-    /*
     private void analyseOperande() throws ErreurSyntaxique {
-        //ça c'est pour après wait wait wait
         if (!this.estCsteEntiere() && !this.estIdf()) {
             throw new ErreurSyntaxique("opérande attendu");
         }
         this.uniteCourante = this.analex.next();
-    }*/
-
-
-    //ça bah nn pas utile enfaite
-    private boolean estType() {
-        return (this.uniteCourante.equals("entier")||this.uniteCourante.equals("tableau"));
     }
+
+    private boolean estType() {
+        return this.uniteCourante.equals("entier");
+    }
+
 
 
 

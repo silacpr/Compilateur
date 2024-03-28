@@ -2,16 +2,19 @@ package plic;
 
 import plic.analyse.AnalyseurSyntaxique;
 import plic.analyse.ErreurSyntaxique;
-import plic.repint.*;
+import plic.repint.AbsenceDeclaration;
+import plic.repint.Bloc;
+import plic.repint.DoubleDeclaration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Plic {
     public static void main(String[] args) throws ErreurSyntaxique {
-        //System.out.println(args[0]);
-        args[0]="src/plic/sources/test.plic";
-        System.out.println(args.length);
+
+        System.out.println(args[0]);
+//        args[0]="src/plic/sources/test1.plic";
+//        System.out.println(args.length);
 
         try {
 
@@ -48,10 +51,6 @@ public class Plic {
 
         AnalyseurSyntaxique as = new AnalyseurSyntaxique(file);
         Bloc bloc = as.analyse();
-
-        //TDS.getInstance().getTable().forEach(((entree, symbole) -> System.out.println(entree.getIdf() + " a pour emplacement " + symbole.getDeplacement())));
-
-        //System.out.println(TDS.getInstance().getTable().size());
         String mdr = bloc.toMips();
         System.out.println("\n\n"+mdr);
 

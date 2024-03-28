@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="plic:jar">
-    <output-path>$PROJECT_DIR$/src</output-path>
+    <output-path>$PROJECT_DIR$</output-path>
     <root id="archive" name="plic.jar">
       <element id="module-output" name="compilateur" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.13.1/junit-4.13.1.jar" path-in-jar="/" />

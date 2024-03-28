@@ -4,7 +4,9 @@ programme test {
     tableau [ 7 ] b ;
     tableau [ 5 ] c ;
     a := 4 ;
-    c [ 4 ] := 3 ;
-    b [ 0 ] := c [ 4 ] ;
+    c [ 0 ] := 59 ;
+    ecrire c [ 0 ] ;
+    b [ 0 ] := a ;
     ecrire b [ 0 ] ;
+
 }
