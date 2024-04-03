@@ -1,10 +1,12 @@
 package plic.repint;
 
-public class Acces extends Expression {
+public abstract class Acces extends Expression {
     @Override
     public String toString() {
         return null;
     }
+
+    public abstract String getAdresse();
 
     @Override
     public String getType() {
@@ -16,9 +18,6 @@ public class Acces extends Expression {
         return null;
     }
 
-    public String getAdress(){
-        return "";
-    }
 
     public void verifier(){
 

@@ -6,17 +6,30 @@ public class Idf extends Acces {
         this.nom = nom;
     }
     @Override
-    public String toString() {
-        Symbole symbole = null;
-        try {
-            symbole = TDS.getInstance().identifier(new Entree(nom));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String getAdresse() {
+        Symbole symbole = TDS.getInstance().identifier(new Entree(nom));
+
         int depl = symbole.getDeplacement();
-        return "lw $t0, " + depl + "($fp)\n";
+        return "la $a0, " + depl + "($s7)\n";
     }
+
+
+    @Override
+    public String toMips() {
+        return getAdresse() + "lw $v0, 0($a0)\n";
+    }
+
+
+
     public String getNom() {
         return this.nom;
     }
+
+
+    @Override
+    public String getType() {
+        return "idf";
+    }
+
+
 }

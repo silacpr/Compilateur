@@ -1,0 +1,22 @@
+programme year {
+entier annee ;
+entier mois ;
+entier i ;
+tableau [ 5 ] a ;
+tableau [ 10 ] b ;
+
+a [ 2 ] := 32 ;
+a [ 0 ] := 2 ;
+b [ 0 ] := 2 ;
+
+i := 2 ;
+annee := 3 ;
+mois := a [ a [ 0 ] ] ;
+//ecrire mois ;
+a [ b [ 0 ] ] := 50 ;
+
+//ecrire a [ 0 ] ;
+//ecrire annee ;
+
+ecrire a [ 2 ] ;
+}

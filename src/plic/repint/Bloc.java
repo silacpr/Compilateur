@@ -20,8 +20,8 @@ public class Bloc {
                 ".text\n" +
                 ".globl main\n" +
                 "main:\n\n" +
-                "li $sp, 0x7ffffffc\n" +
-                "move $fp, $sp\n");
+                "move $s7, $sp \n" +
+                "add $sp, $sp,-24 \n");
         for (Instruction instruction : instructions) {
             mipsCode.append(instruction.toString());
             mipsCode.append("\n");

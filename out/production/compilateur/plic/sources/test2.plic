@@ -1,8 +1,11 @@
 programme age {
 //petit programme pour ecrire l'age de quelqu'un
 entier age ;
+entier agee ;
 age := 15 ;
 ecrire age ;
 age := 16 ;
 ecrire age ;
+agee := age ;
+ecrire agee ;
 }

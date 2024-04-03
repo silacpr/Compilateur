@@ -12,11 +12,11 @@ public class SymboleEntier extends Symbole{
 
     @Override
     public int getDeplacement() {
-        return 0;
+        return deplacement;
     }
 
     @Override
     public String getType() {
-        return null;
+        return type;
     }
 }

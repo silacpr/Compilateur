@@ -1,28 +1,26 @@
 package plic.repint;
 
 public class Affectation extends Instruction {
-    private String idf;
+    private Acces acces;
     private Expression expression;
-    public Affectation(String idf, Expression expression) {
-        this.idf = idf;
+
+    public Affectation(Acces acces, Expression expression) {
+        this.acces = acces;
         this.expression = expression;
-    }
-
-    public void verifier(){
-
     }
 
     @Override
     public String toString() {
-        Symbole symbole = null;
-        try {
-            symbole = TDS.getInstance().identifier(new Entree(idf));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        int depl = symbole.getDeplacement();
-        String exprCode = expression.toString();
-        String mipsCode = exprCode + "sw $t0, " + depl + "($fp)\n";
-        return mipsCode;
+        String codeAdresse = acces.getAdresse();
+        String codeValeur = expression.toMips();
+
+        return codeValeur +
+                "sub $sp, $sp, 4\n" +
+                "sw $v0, 0($sp)\n" +
+                codeAdresse +
+                "lw $v0, 0($sp)\n" +
+                "add $sp, $sp, 4\n" +
+                "sw $v0, 0($a0)\n";
     }
+
 }

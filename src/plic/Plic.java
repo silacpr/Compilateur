@@ -5,6 +5,7 @@ import plic.analyse.ErreurSyntaxique;
 import plic.repint.AbsenceDeclaration;
 import plic.repint.Bloc;
 import plic.repint.DoubleDeclaration;
+import plic.repint.TDS;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,8 +14,8 @@ public class Plic {
     public static void main(String[] args) throws ErreurSyntaxique {
 
         System.out.println(args[0]);
-//        args[0]="src/plic/sources/test1.plic";
-//        System.out.println(args.length);
+        args[0]="src/plic/sources/test8.plic";
+        System.out.println(args.length);
 
         try {
 
@@ -52,7 +53,15 @@ public class Plic {
         AnalyseurSyntaxique as = new AnalyseurSyntaxique(file);
         Bloc bloc = as.analyse();
         String mdr = bloc.toMips();
+
+        TDS.getInstance().getTable().forEach((a,symbole)->{
+            System.out.println("idf : "+ a.getIdf() + " depl = "+symbole.getDeplacement());
+
+        });
+
         System.out.println("\n\n"+mdr);
+
+
 
 
     }

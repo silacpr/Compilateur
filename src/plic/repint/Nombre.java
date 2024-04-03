@@ -6,17 +6,14 @@ public class Nombre extends Expression{
         this.val = val;
     }
     @Override
-    public String toString() {
-        return "li $t0, " + val + "\n";
-    }
-
-    @Override
     public String getType() {
-        return null;
+        return "nombre";
     }
 
     @Override
     public String toMips() {
-        return null;
+        return "li $v0, " + val + "\n";
     }
+
+
 }

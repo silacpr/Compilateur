@@ -1,0 +1,10 @@
+bah enfaite là je ne sais pas exactement comment faire pour le tableau
+
+ex :
+
+tab [ 1 ] -> 1 c'est un Nombre
+
+tab [ a ] -> a c'est un Idf / Acces
+
+tab [ tab [ 1 ] ] -> tab c'est un tableau / Acces avec comme index 1 un Nombre
+

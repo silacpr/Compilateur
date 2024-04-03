@@ -2,26 +2,26 @@ package plic.repint;
 
 public class Ecrire extends Instruction {
     private Expression expression;
+
     public Ecrire(Expression expression) {
         this.expression = expression;
     }
 
+
     @Override
-    public String toString(){
-        String mipsCode;
-        if (expression instanceof Idf) {
-            Idf idf = (Idf) expression;
-            Symbole symbole = null;
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(expression.toMips());
 
-            symbole = TDS.getInstance().identifier(new Entree(idf.getNom()));
+        sb.append("move $a0, $v0\n");
+        sb.append("li $v0, 1\n");
+        sb.append("syscall\n");
 
-            int depl = symbole.getDeplacement();
-            mipsCode = "lw $a0, " + depl + "($fp)\n";
-        } else {
-            mipsCode = expression.toString();
-        }
-        mipsCode += "li $v0, 1\nsyscall\n";
-        mipsCode += "li $v0, 4\nla $a0, next\nsyscall\n";
-        return mipsCode;
+        sb.append("li $v0, 4\n");
+        sb.append("la $a0, next\n");
+        sb.append("syscall\n");
+
+        return sb.toString();
     }
+
 }
