@@ -9,30 +9,27 @@ import java.util.Arrays;
 import java.util.List;
 public class AnalyseurSyntaxique {
 
-    /*
-    deja reussir à écrire un bon analyseur syntaxique
-
-    coder pour generer avec les tableaux
-
-    modifier pour accepter les operations
-
-    coder pour generer avec des operations.
-
-    jpp de ce cours il est horrible.
-     */
-
     private AnalyseurLexical analex;
     private String uniteCourante;
+
+    /*
+
+    bon alors mtn il faut que j'ajoute les instructions comme pour si et lire
+     */
 
 
     public AnalyseurSyntaxique(File file) throws FileNotFoundException {
         this.analex = new AnalyseurLexical(file);
     }
 
-    public Bloc analyse() throws ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration {
+    public Bloc analyse() throws ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration{
+
         this.uniteCourante = this.analex.next();
+
         Bloc bloc =  this.analyseProg();
+
         if(!this.uniteCourante.equals("EOF")) throw new ErreurSyntaxique("EOF attendu");
+
         return bloc;
     }
 
@@ -76,28 +73,23 @@ public class AnalyseurSyntaxique {
     }
 
 
-    //analyse bloc à modifier???
-    //je pense pas.
-    private Bloc analyseBloc() throws ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration {
+    private Bloc analyseBloc() throws ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration  {
         this.analyseTerminal("{");
 
         Bloc bloc = new Bloc();
 
-        // Ajoutez une boucle pour gérer les déclarations initiales si elles existent.
         while (uniteCourante.equals("entier")||uniteCourante.equals("tableau")) {
             this.analyseDeclaration();
         }
 
-        // Ajoutez une boucle pour lire et ajouter toutes les instructions jusqu'à ce que vous rencontriez "}".
         while (!uniteCourante.equals("}")) {
-            bloc.ajouter(this.analyseInstruction()); // Il faut ajouter cette instruction dans la boucle
+            bloc.ajouter(this.analyseInstruction());
         }
         this.analyseTerminal("}");
         return bloc;
     }
 
 
-    //ça bouge pas
     private void analyseTerminal(String terminal) throws ErreurSyntaxique {
         if (!this.uniteCourante.equals(terminal)) {
             throw new ErreurSyntaxique(terminal + " attendu ");
@@ -105,10 +97,6 @@ public class AnalyseurSyntaxique {
         this.uniteCourante = this.analex.next();
     }
 
-
-
-
-    //à modifier???
     private void analyseDeclaration() throws ErreurSyntaxique, DoubleDeclaration {
 
             String type = this.analyseType();
@@ -152,7 +140,6 @@ public class AnalyseurSyntaxique {
 
     }
 
-    //bon bon bon
     private String analyseType() throws ErreurSyntaxique {
         if (!this.uniteCourante.equals("entier")&&!this.uniteCourante.equals("tableau")) {
             throw new ErreurSyntaxique("Type 'entier' ou 'tableau' attendu");
@@ -162,7 +149,7 @@ public class AnalyseurSyntaxique {
         return type;
     }
 
-    private Instruction analyseInstruction() throws ErreurSyntaxique, AbsenceDeclaration {
+    private Instruction analyseInstruction() throws ErreurSyntaxique, AbsenceDeclaration{
         Instruction instruction;
 
         if (this.estIdf()) {
@@ -186,43 +173,23 @@ public class AnalyseurSyntaxique {
         return ecrire;
     }
 
-    private Instruction analyseAffectation() throws ErreurSyntaxique {
+    private Instruction analyseAffectation() throws ErreurSyntaxique{
 
-
-        //là c'est censé être acces pas besoin de tout ça..
-
-        //String idf = this.uniteCourante;
         Acces acces = analyseAcces();
 
 
         this.analyseTerminal(":=");
 
-        //System.out.println("bahhh" + this.uniteCourante);
 
-        //this.uniteCourante = this.analex.next();
+        Expression expression = this.analyseExpression();
 
 
-        //une affectation prend un acces pas juste un idf enfaite
+        Affectation instruction = new Affectation(acces,expression);
 
-        Affectation instruction = new Affectation(acces,this.analyseExpression());
         this.analyseTerminal(";");
         return instruction;
     }
 
-    /*
-    private void analyseAcces() throws ErreurSyntaxique {
-        if (!this.estIdf()) {
-            throw new ErreurSyntaxique("Idf attendu");
-        }
-        this.uniteCourante = this.analex.next();
-    }
-    */
-
-
-    /*
-    IL FAUT QUE J'AJOUTE CA PARCE QU'IL N'Y EST PAS DANS MA VERSION PRECEDENTE DONC
-    JE DOIS L'AJOUTER POUR AVOIR UN VRAI CODE FONCTIONNEL
-*/
     private Acces analyseAcces() throws ErreurSyntaxique {
         Acces acces = null;
         if (!this.estIdf()) {
@@ -238,7 +205,6 @@ public class AnalyseurSyntaxique {
 
             Expression expression = this.analyseExpression();
 
-            //this.uniteCourante = this.analex.next();
             this.analyseTerminal("]");
 
             acces = new AccesTableau(new Idf(idf), expression);
@@ -252,34 +218,48 @@ public class AnalyseurSyntaxique {
     }
 
 
-
-    //je dois aussi modifier ça
-
-    //bah en fait là c'est juste l'expression en globale
     private Expression analyseExpression() throws ErreurSyntaxique {
-        Expression result = analyseOperande(); // Analyse le premier opérande
+        Expression result = analyseOperande();
 
-        // Gérer les opérations binaires
         while (estOperateur()) {
             String operateur = uniteCourante;
             this.uniteCourante = this.analex.next();
-            Expression droite = analyseOperande(); // Analyse le deuxième opérande
+            Expression droite = analyseOperande();
 
             switch (operateur) {
                 case "+":
                     result = new Somme(result, droite);
                     break;
-
                 case "-":
                     result = new Soustraction(result, droite);
                     break;
-
                 case "*":
                     result = new Multiplication(result, droite);
                     break;
-
-
-                // Ajouter d'autres cas pour "*", "/", opérateurs relationnels, etc.
+                case "et":
+                    result = new Et(result, droite);
+                    break;
+                case "ou":
+                    result = new Ou(result, droite);
+                    break;
+                case "<":
+                    result = new Inferieur(result, droite);
+                    break;
+                case ">":
+                    result = new Superieur(result, droite);
+                    break;
+                case "=":
+                    result = new Egal(result, droite);
+                    break;
+                case "#":
+                    result = new NonEgal(result, droite);
+                    break;
+                case ">=":
+                    result = new SuperieurOuEgal(result, droite);
+                    break;
+                case "<=":
+                    result = new InferieurOuEgal(result, droite);
+                    break;
             }
         }
 
@@ -287,9 +267,6 @@ public class AnalyseurSyntaxique {
     }
 
 
-
-    //qu'est ce que c'était que ça
-    //ahh faut que je check ça mtn
     private Expression analyseOperande() throws ErreurSyntaxique {
         if (estCsteEntiere()) {
             int valeur = Integer.parseInt(uniteCourante);
@@ -302,15 +279,16 @@ public class AnalyseurSyntaxique {
             Expression expr = analyseExpression();
             analyseTerminal(")");
             return expr;
-        } else if (uniteCourante.equals("-")) { // Opération unaire négation
+        } else if (uniteCourante.equals("-")) {
             this.uniteCourante = this.analex.next();
             Expression expr = analyseExpression();
             return new Negation(expr);
-        } /*else if (uniteCourante.equals("non")) { // Opération logique unaire NON
+        } else if (uniteCourante.equals("non")) {
             this.uniteCourante = this.analex.next();
             Expression expr = analyseExpression();
             return new Non(expr);
-        }*/
+        }
+
 
         throw new ErreurSyntaxique("Opérande attendu");
     }
@@ -319,9 +297,5 @@ public class AnalyseurSyntaxique {
     private boolean estOperateur() {
         return Arrays.asList("+", "-", "*", "/", "et", "ou", "<", ">", "=", "#", "<=", ">=").contains(uniteCourante);
     }
-
-
-
-
 
 }

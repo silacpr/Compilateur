@@ -34,7 +34,6 @@ public class AnalyseurLexical {
                 else break;
             }
         }
-        //tab.stream().forEach((e)-> System.out.print(e+" "));
     }
 
     public String next(){

@@ -1,0 +1,28 @@
+programme test {
+    entier k ;
+    entier a ;
+    entier b ;
+    entier f ;
+    tableau [ 5 ] d ;
+    entier mdr ;
+
+    d [ 3 ] := 10 ;
+    k := 57  ;
+    a := k - 5 ;
+    b := a * k ;
+    f := ( 5 * 3 ) + d [ 3 ] ;
+    b := ( ( 5 * 3 ) + d [ 4 - 1 ] ) ;
+    a := ( 12 * ( 3 + d [ 4 - 1 ] ) ) ;
+    //a := ( 12 * ( 3 + d [ 4 - 1 ] ) ) ; // problème car f := 12 ici
+
+    ecrire d [ 0 ] ;
+    ecrire d [ 1 ] ;
+    ecrire d [ 2 ] ;
+    ecrire d [ 3 ] ;
+    ecrire d [ 4 ] ;
+    ecrire k ;
+    ecrire f ; //25
+    ecrire a ; //156
+    ecrire b ; //25
+    ecrire mdr ;
+}

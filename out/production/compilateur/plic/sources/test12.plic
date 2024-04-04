@@ -1,0 +1,25 @@
+programme unpoquitocomplicado {
+    entier i ;
+    entier j ;
+    entier k ;
+    entier z ;
+    tableau [ 30 ] t ;
+    entier h ;
+
+    t [ 24 ] := 10 ;
+
+    i := 23 ;
+    j := i - 3 ;
+    k := 2 ;
+    z := ( k + 1 ) - j ;
+    h := ( k + 1 ) - t [ i + 1 ] ;
+
+    ecrire i ;
+    ecrire j ;
+    ecrire k ;
+    ecrire z ;
+    ecrire h ;
+    ecrire h < i ;
+
+
+}

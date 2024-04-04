@@ -24,4 +24,14 @@ public class Ecrire extends Instruction {
         return sb.toString();
     }
 
+    @Override
+    public void verifier() throws AbsenceDeclaration {
+        if (expression.getType().equals("tableau")){
+            ((AccesTableau) expression).verifier();
+        }
+        else if (expression.getType().equals("idf")){
+            ((Idf) expression).verifier();
+        }
+    }
+
 }

@@ -10,6 +10,10 @@ public class Nombre extends Expression{
         return "nombre";
     }
 
+    public int getVal() {
+        return val;
+    }
+
     @Override
     public String toMips() {
         return "li $v0, " + val + "\n";

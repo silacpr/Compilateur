@@ -1,5 +1,7 @@
 package plic.repint;
 
+import plic.analyse.ErreurSémantique;
+
 public class Affectation extends Instruction {
     private Acces acces;
     private Expression expression;
@@ -21,6 +23,20 @@ public class Affectation extends Instruction {
                 "lw $v0, 0($sp)\n" +
                 "add $sp, $sp, 4\n" +
                 "sw $v0, 0($a0)\n";
+    }
+
+    @Override
+    public void verifier() throws AbsenceDeclaration, ErreurSémantique {
+        if (expression.getType().equals("tableau")){
+            ((AccesTableau) expression).verifier();
+        }
+        else if (expression.getType().equals("idf")){
+            ((Idf) expression).verifier();
+        }
+        else if (expression.getType().equals("boolean")){
+            throw new ErreurSémantique("erreur sémantique");
+
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package plic.repint;
 
+import plic.analyse.ErreurSémantique;
+
 import java.util.ArrayList;
 
 public class Bloc {
@@ -10,12 +12,13 @@ public class Bloc {
     public void ajouter(Instruction i){
         this.instructions.add(i);
     }
-    public String toMips() {
+    public String toMips() throws AbsenceDeclaration, ErreurSémantique {
 
         StringBuilder mipsCode = new StringBuilder();
 
         mipsCode.append(".data\n" +
                 "next: .asciiz \"\\n\"\n" +
+                "text:  .asciiz \"Veuillez saisir un idf: \"\n"+
                 "\n" +
                 ".text\n" +
                 ".globl main\n" +
@@ -23,6 +26,7 @@ public class Bloc {
                 "move $s7, $sp \n" +
                 "add $sp, $sp,-24 \n");
         for (Instruction instruction : instructions) {
+            instruction.verifier();
             mipsCode.append(instruction.toString());
             mipsCode.append("\n");
         }

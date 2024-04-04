@@ -7,15 +7,11 @@ entier f ;
 tableau [ 5 ] a ;
 tableau [ 2 ] g ;
 
-
-
-
-
 a [ 2 ] := 1000 ;
 c := 0 ;
 g [ 0 ] := 2 ;
 b := 200 ;
-f := ( ( b + 50 ) + a [ g [ 0 ] ] ;
+f := ( ( b + 50 ) + a [ g [ 0 ] ] ) ;
 
 ecrire a [ g [ 0 ] ] ;
 ecrire c ;

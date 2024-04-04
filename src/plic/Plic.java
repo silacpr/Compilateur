@@ -2,6 +2,7 @@ package plic;
 
 import plic.analyse.AnalyseurSyntaxique;
 import plic.analyse.ErreurSyntaxique;
+import plic.analyse.ErreurSémantique;
 import plic.repint.AbsenceDeclaration;
 import plic.repint.Bloc;
 import plic.repint.DoubleDeclaration;
@@ -12,12 +13,9 @@ import java.io.FileNotFoundException;
 
 public class Plic {
     public static void main(String[] args) throws ErreurSyntaxique {
-
-        System.out.println(args[0]);
-        args[0]="src/plic/sources/test8.plic";
-        System.out.println(args.length);
-
         try {
+
+            args = new String[]{"src/plic/sources/test13.plic"};
 
             if (args.length != 1) {
                 throw new IllegalArgumentException("ERREUR: Fichier source absent");
@@ -27,7 +25,6 @@ public class Plic {
                 throw new IllegalArgumentException("ERREUR: Suffixe incorrect");
             }
             nomFichier="src/plic/"+nomFichier;
-            System.out.println(nomFichier);
             File file = new File(nomFichier);
             if (!file.exists()) {
                 throw new FileNotFoundException("ERREUR: Fichier source absent");
@@ -43,23 +40,25 @@ public class Plic {
         }catch (AbsenceDeclaration e){
             System.out.println("ERREUR: "+ e.getMessage());
         }
+        catch (ErreurSémantique e){
+            System.out.println("ERREUR: "+ e.getMessage());
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
 
     }
 
-    public Plic(String nomFichier) throws FileNotFoundException, ErreurSyntaxique, DoubleDeclaration, AbsenceDeclaration {
+    public Plic(String nomFichier) throws DoubleDeclaration, ErreurSémantique, ErreurSyntaxique, FileNotFoundException, AbsenceDeclaration {
         File file = new File(nomFichier);
 
         AnalyseurSyntaxique as = new AnalyseurSyntaxique(file);
         Bloc bloc = as.analyse();
-        String mdr = bloc.toMips();
+        String mips = bloc.toMips();
 
-        TDS.getInstance().getTable().forEach((a,symbole)->{
-            System.out.println("idf : "+ a.getIdf() + " depl = "+symbole.getDeplacement());
 
-        });
-
-        System.out.println("\n\n"+mdr);
+        System.out.println(mips);
 
 
 

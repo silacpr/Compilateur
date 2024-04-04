@@ -31,5 +31,12 @@ public class Idf extends Acces {
         return "idf";
     }
 
+    @Override
+    public void verifier() throws AbsenceDeclaration {
+
+        if (!TDS.getInstance().idfexiste(new Entree(this.getNom()))) throw new AbsenceDeclaration(this.getNom()+" non déclaré");
+
+    }
+
 
 }

@@ -19,7 +19,7 @@ public abstract class Acces extends Expression {
     }
 
 
-    public void verifier(){
+    public void verifier() throws AbsenceDeclaration {
 
     }
 

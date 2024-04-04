@@ -1,20 +1,28 @@
 programme year {
+tableau [ 5 ] a ;
 entier b ;
 entier c ;
 entier d ;
 entier e ;
 entier f ;
-tableau [ 5 ] a ;
+entier x ;
 tableau [ 2 ] g ;
 
-a [ 3 ] := 1000 ;
-c := 0 ;
-g [ 0 ] := 3 ;
-b := 200 ;
-f := - 5  - 10  ;
+f := - ( 10 + 5 ) ;
 
-ecrire a [ g [ 0 ] ] ;
-ecrire c ;
-ecrire b ;
+g [ 1 ] :=  10 + 0 ;
+
 ecrire f ;
+
+ecrire a [ 0 ] ;
+ecrire a [ 1 ] ;
+ecrire a [ 2 ] ;
+ecrire a [ 3 ] ;
+ecrire a [ 4 ] ;
+
+ecrire g [ 1 ] ;
+
+ecrire 7 ;
+
+
 }
